@@ -1,7 +1,6 @@
 .venv/
 __pycache__/
 
-# fichiers générés par les scripts
-partie1_aes/resultats/
-partie2_rsa/key.pub
-partie2_rsa/key.priv
+# images générées par q1_q2_images.py
+partie1_aes/tux_ecb.ppm
+partie1_aes/tux_cbc.ppm

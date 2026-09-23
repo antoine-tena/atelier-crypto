@@ -1,27 +1,20 @@
-"""Question 3 : adversaire qui gagne le jeu CPA contre AES-ECB avec probabilité 1."""
+# Question 3 : l'adversaire gagne toujours le jeu CPA contre AES-ECB
+import random
+
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-BLOC = AES.block_size
+m0 = b"A" * 16 + b"A" * 16  # deux blocs identiques
+m1 = b"A" * 16 + b"B" * 16  # deux blocs différents
 
-
-def challenger(m0: bytes, m1: bytes) -> tuple[int, bytes]:
-    """Tire une clé et un bit b, renvoie b et c* = Enc_k(m_b)."""
+victoires = 0
+for _ in range(1000):
+    # challenger
     key = get_random_bytes(16)
-    b = get_random_bytes(1)[0] & 1
-    return b, AES.new(key, AES.MODE_ECB).encrypt([m0, m1][b])
+    b = random.randint(0, 1)
+    c = AES.new(key, AES.MODE_ECB).encrypt([m0, m1][b])
+    # adversaire
+    b_devine = 0 if c[:16] == c[16:] else 1
+    victoires += b == b_devine
 
-
-def adversaire():
-    x, y = b"A" * BLOC, b"B" * BLOC
-    m0 = x + x  # deux blocs identiques
-    m1 = x + y  # deux blocs différents
-    b, c = challenger(m0, m1)
-    b_devine = 0 if c[:BLOC] == c[BLOC:] else 1
-    return b == b_devine
-
-
-if __name__ == "__main__":
-    essais = 1000
-    victoires = sum(adversaire() for _ in range(essais))
-    print(f"L'adversaire gagne {victoires}/{essais} parties")
+print("Victoires :", victoires, "/ 1000")

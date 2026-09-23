@@ -1,22 +1,11 @@
-"""Question 7 : attaque par espace de messages réduit sur Textbook RSA."""
+# Question 7 : attaque par espace de messages réduit sur Textbook RSA
 from Crypto.PublicKey import RSA
-from pathlib import Path
 
 import tools
 
-DATA = Path(__file__).parent / 'data'
+public_key = RSA.import_key(open("data/part2_key.pub").read())
+ctext = int(open("data/part2_ctext").read().strip("()L,\n "))  # format "(123...L,)"
 
-public_key = RSA.import_key((DATA / 'part2_key.pub').read_text())
-n, e = public_key.n, public_key.e
-
-# le fichier contient un tuple Python 2 : "(123...L,)"
-ctext = int((DATA / 'part2_ctext').read_text().strip("()L,\n "))
-
-messages = (DATA / 'part2_messagespace').read_text().splitlines()
-
-for m in messages:
-    if pow(tools.text_to_int(m), e, n) == ctext:
-        print("Message trouve :", m)
-        break
-else:
-    print("Aucun message ne correspond")
+for m in open("data/part2_messagespace").read().splitlines():
+    if pow(tools.text_to_int(m), public_key.e, public_key.n) == ctext:
+        print("Message :", m)
