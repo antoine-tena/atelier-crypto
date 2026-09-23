@@ -1,9 +1,13 @@
-# Question 6 — Prise en main et vérification de signature RSA
+"""Question 6 : prise en main de RSA et vérification manuelle d'une signature."""
 # (version Python 3 / pycryptodome du script d'exemple)
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 from Crypto.Signature import pkcs1_15
+from pathlib import Path
+
 import tools
+
+ICI = Path(__file__).parent
 
 secparam = 2048
 
@@ -12,11 +16,11 @@ key = RSA.generate(secparam)
 public_key = key.publickey()
 
 # sauvegarde puis relecture des cles
-open('key.pub', 'wb').write(public_key.export_key())
-open('key.priv', 'wb').write(key.export_key())
-recovered_public_key = RSA.import_key(open('key.pub', 'rb').read())
+open(ICI / 'key.pub', 'wb').write(public_key.export_key())
+open(ICI / 'key.priv', 'wb').write(key.export_key())
+recovered_public_key = RSA.import_key(open(ICI / 'key.pub', 'rb').read())
 assert recovered_public_key == public_key
-recovered_key = RSA.import_key(open('key.priv', 'rb').read())
+recovered_key = RSA.import_key(open(ICI / 'key.priv', 'rb').read())
 assert recovered_key == key
 
 # chiffrement / dechiffrement Textbook RSA a la main

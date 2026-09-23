@@ -1,4 +1,7 @@
 .venv/
 __pycache__/
-key.pub
-key.priv
+
+# fichiers générés par les scripts
+partie1_aes/resultats/
+partie2_rsa/key.pub
+partie2_rsa/key.priv
